@@ -8,7 +8,9 @@
                     <Table border :columns="brandColumns" :data="brandTableData" :highlight-row="true" ></Table>
                 </div>
             </TabPane>
-            <TabPane label="新增" name="addBrand">新增品牌</TabPane>
+            <TabPane label="新增" name="addBrand">
+                <BrandEditorAdd></BrandEditorAdd>
+            </TabPane>
             <TabPane label="编辑" :disabled="isEditDisabled" name="editBrand">编辑品牌</TabPane>
         </Tabs>
 
@@ -17,9 +19,12 @@
 
 <script>
     import Button from '../../../node_modules/iview/src/components/button/button.vue';
+    import BrandEditorAdd from './brand-editor-add.vue';
 
     export default {
-      components: {Button},
+      components: {
+          Button,
+          BrandEditorAdd},
       name: 'brand-editor',
         data () {
             return {

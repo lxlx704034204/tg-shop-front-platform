@@ -81,7 +81,7 @@ export const appRouter = [
     path: '/goods',
     icon: 'ios-grid-view',
     name: 'goods',
-    title: '商品管理',
+    title: '基础数据',
     component: Main,
     children: [
       { path: 'attribute-editor', title: '属性管理', name: 'attribute-editor', icon: 'compose', component: () => import('@/views/goods/attribute-editor.vue') },
