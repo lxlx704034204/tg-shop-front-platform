@@ -87,7 +87,7 @@
                   { validator: validateBrandName, trigger: 'blur' }
                 ],
                 brandLogoUrl: [
-                  { required: true, message: 'LOGO不能为空', trigger: 'blur' }
+                  { required: true, message: 'LOGO不能为空', trigger: 'change' }
                 ]
               }
             };
