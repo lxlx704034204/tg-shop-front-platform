@@ -10,12 +10,16 @@ import VueI18n from 'vue-i18n';
 import util from './libs/util';
 import VueResource from 'vue-resource';
 
+// import axios from 'axios';
+// axios.defaults.withCredentials=true;
+// Vue.prototype.$axios = axios;
+
 Vue.use(VueI18n);
 Vue.use(iView);
 Vue.use(VueResource);
 
 Vue.http.options.emulateJSON = true;
-Vue.http.options.xhr = { withCredentials: true };
+// Vue.http.options.withCredentials = true;
 
 new Vue({
     el: '#app',
