@@ -26,13 +26,13 @@
                                 </span>
                             </Input>
                         </FormItem>
-                        <FormItem prop="captcha" v-if="requireCaptcha!=0">
-                            <Input type="text" v-model="form.captcha" >
-                                <span slot="append">
-                                        <img :src="captImgData" class="captImg" title="点击更换" @click="changeCaptcha"/>
-                                </span>
-                            </Input>
-                        </FormItem>
+                        <!--<FormItem prop="captcha" v-if="requireCaptcha!=0">-->
+                            <!--<Input type="text" v-model="form.captcha" >-->
+                                <!--<span slot="append">-->
+                                        <!--<img :src="captImgData" class="captImg" title="点击更换" @click="changeCaptcha"/>-->
+                                <!--</span>-->
+                            <!--</Input>-->
+                        <!--</FormItem>-->
                         <FormItem>
                             <Button @click="handleSubmit" type="primary" long>登录</Button>
                         </FormItem>
@@ -48,7 +48,8 @@
 import Cookies from 'js-cookie';
 import {SERVER_URL} from '../assets/config.js';
 import axios from 'axios';
-axios.defaults.withCredentials=true;
+import qs from 'qs';
+// import $ from 'jquery';
 
 export default {
     data () {
@@ -67,8 +68,8 @@ export default {
             requireCaptcha:false,
             captImgData: '#',
             form: {
-                userName: 'iview_admin',
-                password: '',
+                userName: 'admin',
+                password: '123',
                 captcha: ''
             },
             rules: {
@@ -94,8 +95,9 @@ export default {
                   return;
                 }
                 let url = SERVER_URL + '/login';
-                axios.post(url,this.form)
+                this.$axios.post(url,qs.stringify(this.form))
                   .then(res=>{
+                    let data = res.data;
                       if(res.data.result==1){
                        Cookies.set('user', this.form.userName);
                        Cookies.set('password', this.form.password);
@@ -106,11 +108,13 @@ export default {
                        } else {
                          Cookies.set('access', 1);
                        }
+                        axios.defaults.headers.common['Access-Token']=data.token;
+                       console.log('Access-Token:'+axios.defaults.headers.common['Access-Token']);
+                       this.$axios = axios.create();
                         this.$router.push({
                           name: 'home_index'
                         });
                       }else{
-                        let data = res.data;
                         this.requireCaptcha = data.requireCaptcha;
                         this.$Message.error(data.message);
                         this.changeCaptcha();
@@ -123,7 +127,7 @@ export default {
         },
       requireCaptchar (){
         let url = SERVER_URL + '/captcha';
-        axios.get(url)
+        this.$axios.get(url)
           .then(res=>{
             this.requireCaptcha=res.data.requireCaptcha;
             if(this.requireCaptcha){
