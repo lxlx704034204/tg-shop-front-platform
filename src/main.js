@@ -10,12 +10,31 @@ import VueI18n from 'vue-i18n';
 import util from './libs/util';
 import VueResource from 'vue-resource';
 
+import axios from 'axios';
+import {SERVER_URL} from './assets/config';
+
+axios.defaults.baseURL=SERVER_URL;
+axios.defaults.headers.common['Access-Token']='';
+
+// 添加响应拦截器
+axios.interceptors.response.use(function (response) {
+  // 对响应数据做点什么
+  console.log(response);
+  return response;
+}, function (error) {
+    console.log('axios.interceptors. '+error);
+  // 对响应错误做点什么
+  return Promise.reject(error);
+});
+
+Vue.prototype.$axios = axios;
+
 Vue.use(VueI18n);
 Vue.use(iView);
 Vue.use(VueResource);
 
 Vue.http.options.emulateJSON = true;
-Vue.http.options.xhr = { withCredentials: true };
+// Vue.http.options.withCredentials = true;
 
 new Vue({
     el: '#app',

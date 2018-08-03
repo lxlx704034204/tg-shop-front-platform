@@ -45,9 +45,11 @@
 </template>
 
 <script>
-//import Cookies from 'js-cookie';
-import { SERVER_URL } from '../assets/config'
-// import {SERVER_URL} from '../../assets/config.js';
+import Cookies from 'js-cookie';
+import {SERVER_URL} from '../assets/config.js';
+import axios from 'axios';
+axios.defaults.withCredentials=true;
+
 export default {
     data () {
         const validateCaptChar = (rule, value, callback) => {
@@ -57,12 +59,9 @@ export default {
               if(!value){
                 return callback(new Error('验证码不能为空'));
               }
+              return callback();
 //              let url = SERVER_URL+'/validateCaptchar?captchar='+value;
-//              this.$http.get(url).then(res=>{
-//
-//              },(res)=>{
-//
-//              });
+
         };
         return {
             requireCaptcha:false,
@@ -95,19 +94,18 @@ export default {
                   return;
                 }
                 let url = SERVER_URL + '/login';
-                this.$http.post(url,this.form)
+                axios.post(url,this.form)
                   .then(res=>{
-                    if(res.ok){
-                      if(res.data.status==1){
-//                        Cookies.set('user', this.form.userName);
-//                        Cookies.set('password', this.form.password);
+                      if(res.data.result==1){
+                       Cookies.set('user', this.form.userName);
+                       Cookies.set('password', this.form.password);
                         // 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg'
                         this.$store.commit('setAvator', '');
-//                        if (this.form.userName === 'iview_admin') {
-//                          Cookies.set('access', 0);
-//                        } else {
-//                          Cookies.set('access', 1);
-//                        }
+                       if (this.form.userName === 'admin') {
+                         Cookies.set('access', 0);
+                       } else {
+                         Cookies.set('access', 1);
+                       }
                         this.$router.push({
                           name: 'home_index'
                         });
@@ -117,9 +115,6 @@ export default {
                         this.$Message.error(data.message);
                         this.changeCaptcha();
                       }
-                    }
-                  },res=>{
-                    this.$Message.error('Error.');
                   });
                 if (valid) {
 
@@ -128,13 +123,14 @@ export default {
         },
       requireCaptchar (){
         let url = SERVER_URL + '/captcha';
-        this.$http.get(url).then(res=>{
-          if(res.ok){
+        axios.get(url)
+          .then(res=>{
             this.requireCaptcha=res.data.requireCaptcha;
             if(this.requireCaptcha){
               this.changeCaptcha();
             }
-          }
+        }).catch(err=>{
+          console.log(err);
         });
       }
     },

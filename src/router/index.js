@@ -36,6 +36,7 @@ router.beforeEach((to, from, next) => {
                 name: 'home_index'
             });
         } else {
+            // 从服务端回去 权限列表，判断是否包含当前标记权限 permissions, 或特定role
             const curRouterObj = Util.getRouterObjByName([otherRouter, ...appRouter], to.name);
             if (curRouterObj && curRouterObj.access !== undefined) { // 需要判断权限的路由
                 if (curRouterObj.access === parseInt(Cookies.get('access'))) {
