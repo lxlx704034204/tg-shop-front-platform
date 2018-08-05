@@ -139,7 +139,7 @@ export default {
       }
     },
       mounted () {
-          this.requireCaptchar();
+          // this.requireCaptchar();
       }
 };
 </script>

@@ -36,6 +36,8 @@ Vue.use(VueResource);
 Vue.http.options.emulateJSON = true;
 // Vue.http.options.withCredentials = true;
 
+require('./mock/mock');
+
 new Vue({
     el: '#app',
     router: router,
